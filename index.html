@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkSetGo – Find Work. Hire Workers.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar">
+  <div class="nav-logo">Work<span>Set</span>Go</div>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <span class="theme-icon">☀</span>
+    </button>
+    <button class="btn btn-outline" onclick="openModal('authModal')">Login / Register</button>
+  </div>
+</nav>
+
+<!-- ========== HOME PAGE ========== -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">India's Local Work Platform</div>
+    <h1 class="hero-title">Connect. Work.<br><span class="accent">Get Paid.</span></h1>
+    <p class="hero-sub">WorkSetGo bridges the gap between skilled workers and those who need them — electricians, plumbers, painters, developers & more. Local. Fast. Trusted.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">500+</span><span class="stat-l">Workers</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-n">200+</span><span class="stat-l">Jobs Posted</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-n">50+</span><span class="stat-l">Categories</span></div>
+    </div>
+  </section>
+
+  <!-- MAIN CARDS -->
+  <section class="cards-section">
+    <div class="main-card hire-card" onclick="goTo('page-hire-categories')">
+      <div class="card-icon">🔧</div>
+      <h2>Hire Workers</h2>
+      <p>Post a job, set your budget, and get skilled workers at your doorstep.</p>
+      <div class="card-arrow">→</div>
+    </div>
+    <div class="main-card find-card" onclick="goTo('page-find-categories')">
+      <div class="card-icon">💼</div>
+      <h2>Find Jobs</h2>
+      <p>Browse local work opportunities and apply in seconds. No experience needed.</p>
+      <div class="card-arrow">→</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ========== HIRE: CATEGORIES ========== -->
+<div id="page-hire-categories" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-home')">← Back</button>
+    <h2>Choose Work Category</h2>
+    <p>What kind of worker do you need?</p>
+  </div>
+  <div class="categories-grid" id="hireCatGrid"></div>
+</div>
+
+<!-- ========== HIRE: FORM ========== -->
+<div id="page-hire-form" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-hire-categories')">← Back</button>
+    <h2>Post a Job</h2>
+    <p id="hireFormSubtitle">Fill in your requirements</p>
+  </div>
+  <div class="form-card">
+    <form id="hireForm" onsubmit="submitHireForm(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Full Name</label>
+          <input type="text" id="h_name" placeholder="e.g. Rahul Sharma" required/>
+        </div>
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="tel" id="h_contact" placeholder="e.g. 9876543210" required/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date Required</label>
+          <input type="date" id="h_date" required/>
+        </div>
+        <div class="form-group">
+          <label>Number of Workers</label>
+          <input type="number" id="h_workers" min="1" max="50" placeholder="e.g. 2" required/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fee Per Worker (₹/day)</label>
+          <input type="number" id="h_fee" placeholder="e.g. 800" required/>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <select id="h_state" required>
+            <option value="">Select State</option>
+            <option>Uttar Pradesh</option><option>Delhi</option><option>Maharashtra</option>
+            <option>Bihar</option><option>Rajasthan</option><option>Madhya Pradesh</option>
+            <option>Gujarat</option><option>Haryana</option><option>Punjab</option>
+            <option>West Bengal</option><option>Tamil Nadu</option><option>Karnataka</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>Full Address / Work Location</label>
+        <textarea id="h_address" rows="3" placeholder="Enter complete address where workers are needed" required></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Job Description (Optional)</label>
+        <textarea id="h_desc" rows="2" placeholder="Briefly describe the work..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Post Job Request</button>
+    </form>
+  </div>
+</div>
+
+<!-- ========== HIRE: MY POSTS ========== -->
+<div id="page-hire-posts" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-home')">← Back</button>
+    <h2>My Job Posts</h2>
+    <p>Track & manage your posted jobs</p>
+  </div>
+  <div id="hirePostsList" class="posts-list"></div>
+</div>
+
+<!-- ========== FIND JOBS: CATEGORIES ========== -->
+<div id="page-find-categories" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-home')">← Back</button>
+    <h2>Find Jobs</h2>
+    <p>Select your work category</p>
+  </div>
+  <div class="categories-grid" id="findCatGrid"></div>
+</div>
+
+<!-- ========== FIND JOBS: STATE ========== -->
+<div id="page-find-state" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-find-categories')">← Back</button>
+    <h2>Select Your State</h2>
+    <p>Choose where you want to work</p>
+  </div>
+  <div class="options-grid" id="stateGrid"></div>
+</div>
+
+<!-- ========== FIND JOBS: DISTRICT ========== -->
+<div id="page-find-district" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-find-state')">← Back</button>
+    <h2>Select District</h2>
+    <p id="districtSubtitle">Choose your district</p>
+  </div>
+  <div class="options-grid" id="districtGrid"></div>
+</div>
+
+<!-- ========== FIND JOBS: LISTINGS ========== -->
+<div id="page-find-listings" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-find-district')">← Back</button>
+    <h2>Available Jobs</h2>
+    <p id="listingsSubtitle">Jobs near you</p>
+  </div>
+  <div id="jobListings" class="jobs-list"></div>
+</div>
+
+<!-- ========== FIND JOBS: APPLY FORM ========== -->
+<div id="page-apply-form" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-find-listings')">← Back</button>
+    <h2>Apply for Job</h2>
+    <p id="applyFormSubtitle">Fill your details to apply</p>
+  </div>
+  <div class="form-card" id="applyJobCard"></div>
+  <div class="form-card" style="margin-top:1rem;">
+    <form id="applyForm" onsubmit="submitApply(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Full Name</label>
+          <input type="text" id="a_name" placeholder="e.g. Suresh Kumar" required/>
+        </div>
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="tel" id="a_contact" placeholder="e.g. 9876543210" required/>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>Your Address</label>
+        <textarea id="a_address" rows="3" placeholder="Your current address" required></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Experience (Optional)</label>
+        <input type="text" id="a_exp" placeholder="e.g. 3 years plumbing work"/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+    </form>
+  </div>
+</div>
+
+<!-- ========== MY APPLICATIONS (Worker) ========== -->
+<div id="page-my-applications" class="page">
+  <div class="page-header">
+    <button class="back-btn" onclick="goTo('page-home')">← Back</button>
+    <h2>My Applications</h2>
+    <p>Track your job applications</p>
+  </div>
+  <div id="myApplicationsList" class="posts-list"></div>
+</div>
+
+<!-- ========== FLOATING ACTION BUTTONS ========== -->
+<div class="fab-group" id="fabGroup">
+  <button class="fab fab-secondary" onclick="goTo('page-my-applications')" title="My Applications">📋</button>
+  <button class="fab fab-primary" onclick="goTo('page-hire-posts')" title="My Job Posts">📌</button>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="footer-brand">Work<span>Set</span>Go</div>
+  <p class="footer-text">PBL PROJECT &nbsp;•&nbsp; TMU &nbsp;•&nbsp; 2026</p>
+</footer>
+
+<!-- ========== AUTH MODAL ========== -->
+<div class="modal-overlay" id="authModal" onclick="closeModalOutside(event,'authModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+      <button class="auth-tab" onclick="switchTab('register')">Register</button>
+    </div>
+    <div id="loginForm">
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@email.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="••••••••"/></div>
+      <button class="btn btn-primary btn-block" onclick="fakeLogin()">Login</button>
+    </div>
+    <div id="registerForm" style="display:none">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your name"/></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@email.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="••••••••"/></div>
+      <div class="form-group">
+        <label>I want to</label>
+        <select><option>Hire Workers</option><option>Find Jobs</option><option>Both</option></select>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="fakeLogin()">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SUCCESS POPUP ========== -->
+<div class="toast" id="toast"></div>
+
+<!-- ========== JOB DETAIL MODAL ========== -->
+<div class="modal-overlay" id="jobDetailModal" onclick="closeModalOutside(event,'jobDetailModal')">
+  <div class="modal" id="jobDetailContent"></div>
+</div>
+
+<!-- ========== CONFIRM CANCEL MODAL ========== -->
+<div class="modal-overlay" id="confirmModal" onclick="closeModalOutside(event,'confirmModal')">
+  <div class="modal confirm-modal">
+    <h3>Cancel Job Post?</h3>
+    <p>This will remove your job listing. Workers won't be able to apply.</p>
+    <div class="confirm-btns">
+      <button class="btn btn-outline" onclick="closeModal('confirmModal')">Keep It</button>
+      <button class="btn btn-danger" onclick="confirmCancel()">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
